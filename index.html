@@ -29,7 +29,45 @@
       hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
       .footer { font-size: 0.7em; text-align:center; padding-top:30px; }
       tt { font-size: 1.4em; }
+      li { padding-bottom: 0.7em; }
     </style>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Date');
+        data.addColumn('number', 'Budget');
+        data.addRows(10);
+        data.setValue(0, 0, 'Mar');
+        data.setValue(0, 1, 12000);
+        data.setValue(1, 0, 'Apr');
+        data.setValue(1, 1, 13000);
+        data.setValue(2, 0, 'May');
+        data.setValue(2, 1, 13000);
+        data.setValue(3, 0, 'Jun');
+        data.setValue(3, 1, 13000);
+        data.setValue(4, 0, 'Jul');
+        data.setValue(4, 1, 14000);
+        data.setValue(5, 0, 'Aug');
+        data.setValue(5, 1, 14000);
+        data.setValue(6, 0, 'Sep');
+        data.setValue(6, 1, 14000);
+        data.setValue(7, 0, 'Oct');
+        data.setValue(7, 1, 15000);
+        data.setValue(8, 0, 'Nov');
+        data.setValue(8, 1, 16000);
+        data.setValue(9, 0, 'Dec');
+        data.setValue(9, 1, 17000);
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, {
+          width: 700, height: 240, title: 'Kitchen Interior: Budget'
+        });
+      }
+    </script>
   </head>
 
   <body>
@@ -70,7 +108,20 @@
         logstream to track that.
       </p>
 
-      <h2>Changing Data</h2>
+      <ul>
+        <li><a href="#data">Stream Data</a></li>
+        <li><a href="#messages">Messages</a></li>
+        <li><a href="#perms">People and Permissions</a></li>
+        <li><a href="#tracking">Data Tracking</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#proof">Provability</a></li>
+        <li><a href="#apps">Applications</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#download">Download</a></li>
+      </ul>
+
+
+      <h2 id="data">Changing Data</h2>
       <p>
         Logstreams have a set of data associated with them. The data
         is made up of key-value pairs (in fact they can be much more
@@ -111,7 +162,7 @@
   value: 13000
 }</pre>
 
-      <h2>Messages</h2>
+      <h2 id="messages">Messages</h2>
       <p>
         Modifying data is only one kind of message: the <tt>modify</tt>
         message. But that is just the tiniest tip of the iceberg for
@@ -184,6 +235,7 @@
         is added with a <tt>group</tt> message of this kind. Without a
         message, a stream is featureless and void.
       </p>
+      <img src="ios.png" style="float:right; margin: 0.5em 0 0.5em 0.5em; border-bottom: 1px solid black;">
       <p>
         These defaults cover 99% of use-cases, but messages not
         covered by this can be added to the stream without
@@ -194,7 +246,7 @@
         handler can be registered to handle special message types.
       </p>
 
-      <h2>People and Permissions</h2>
+      <h2 id="perms">People and Permissions</h2>
       <p>
         Streams are aggregated into projects. A project might be your
         house being built. Whereas the streams may be individual tasks
@@ -222,7 +274,7 @@
         everything important to a project.
       </p>
 
-      <h2>Data Tracking</h2>
+      <h2 id="tracking">Data Tracking</h2>
       <p>
         At the start of this explanation, I mentioned that key-value
         data associated with the stream can be analysed. For many
@@ -230,6 +282,7 @@
         example), you can view the message stream as a graph. You can
         ask to see the graph of the budget over time, for example.
       </p>
+      <div id="chart_div"></div>
       <p>
         If you were using a logstream to chart the progress of a
         project, you could use this to graph the defect rate over
@@ -237,7 +290,7 @@
         graph your weight over time.
       </p>
 
-      <h2>Security</h2>
+      <h2 id="security">Security</h2>
       <p>
         Using messages exclusively means the whole history of changes
         and updates is captured in the set of messages. In fact,
@@ -300,7 +353,7 @@
         and military communications to the highest level.
       </p>
 
-      <h2>Provability</h2>
+      <h2 id="proof">Provability</h2>
       <p>
         Put another way, if whatever you're tracking ends up in court,
         anyone with a message number can verify the entire prior
@@ -348,15 +401,70 @@
         ensures that the data is kept without modification.
       </p>
 
+      <blockquote>
+        <h3>A Note About Security and Provability</h3>
+        <p>
+          The security features of logstream are powerful, but
+          entirely behind the scenes. Logstream is designed to be used
+          in applications where they are needed, but it isn't limited
+          to those applications. If you're just tracking your
+          swim-times, or you want a stream for private use to track a
+          consulting job, that's fine too. The security features won't
+          get in the way.
+        </p>
+      </blockquote>
+
+      <h2 id="apps">Applications</h2>
+
+      <p>
+        Logstream is intended for use whenever you need to track
+        something. Whether it is a quantity that changes over time, or
+        periodic events that happen. Whether it is a conversation, or
+        a project. The applications are unlimited. Here are some
+        examples.
+      </p>
+
+      <ul>
+        <li>
+          Track project progress, allowing different parties to see
+          different streams within a project. Keep up to date with the
+          whole project from one overview, and drill into each stream
+          to analyse its data.
+        </li>
+        <li>
+          Use a stream to track the changing version of a
+          document. Each time someone changes the document and sends
+          it to the stream, the version is logged. There is never any
+          confusion which is the latest, or who has changed it when.
+        </li>
+        <li>
+          Track your running times as you train for a 10K race. Give
+          your friends and family access to your stream, and they can
+          post comments and encouragement, and add photos of the big
+          day.
+        </li>
+        <li>
+          Use a stream for every client you do work for. Given them
+          access to te stream. You can track the hours worked, add
+          reminders to the stream and use it as a base for
+          documents. And you can keep stuff that the client shouldn't
+          see invisible, while allowing them to see and comment on the
+          stuff you do want to share.
+        </li>
+        <li>
+          Use a stream to monitor server-events. Direct error messages
+          to the appropriate stream, and see the messages appear in
+          real time.
+        </li>
+      </ul>
 
 
-
-      <h2>Contact</h2>
+      <h2 id="contact">Contact</h2>
       <p>
         Ian Millington (idmillington@googlemail.com)
       </p>
 
-      <h2>Download</h2>
+      <h2 id="download">Download</h2>
       <p>
         You can download this project in either
         <a href="http://github.com/idmillington/logstream/zipball/master"

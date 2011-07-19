@@ -77,15 +77,26 @@
         complex, and include arbitrary data structures, but key-value
         pairs allow us to do some neat analysis). Lets say we begin with:
       </p>
-<pre>title: Kitchen Interior,
-tags: [interior, furnishings, phase-3, kitchen],
-budget: 14000,
-deadline: 2011-12-18,
-responsible: Anne</pre>
+<pre>{
+  title: Kitchen Interior,
+  tags: [interior, furnishings, phase-3, kitchen],
+  budget: 14000,
+  deadline: 2011-12-18,
+  responsible: Anne
+}</pre>
+      <p><small> NB: In the examples, curly braces just show data that
+          belongs together, while square brackets show a list of
+          similar bits of data. This is only for convenience, though
+          it is similar to the way messages are represented in code
+          (they are in JSON format). When using logstream, however,
+          you work through a user interface with fields to fill in,
+          drop down lists, etc, so you don't have to work with the
+          underlying data.
+      </small></p>
       <p>
-        Notice that in logstream you don't have to break topics down
-        into steps. You can, but it isn't required. In this example we
-        won't.
+        A logstream isn't a to do list. You don't have to break topics
+        down into steps. You can, but it isn't required. In this
+        example we won't.
       </p>
       <p>
         You modify a topic by adding <strong>messages</strong> to
@@ -94,9 +105,11 @@ responsible: Anne</pre>
         we have to squeeze the budget a bit, so the following message
         is sent.
       </p>
-<pre>type: modify,
-key: budget,
-value: 13000</pre>
+<pre>{
+  type: modify,
+  key: budget,
+  value: 13000
+}</pre>
 
       <h2>Messages</h2>
       <p>
@@ -108,9 +121,11 @@ value: 13000</pre>
         finds a superb light-fitting, and wants to get feedback on
         it. She adds the message:
       </p>
-<pre>type: file-uploads,
-image: [uploaded file],
-comment: What do you think about this, Bill, for beside the pantry?</pre>
+<pre>{
+  type: file-uploads,
+  image: [uploaded file],
+  comment: What do you think about this, Bill, for beside the pantry?
+}</pre>
       <p>
         This message, and the attached image is added to the stream
         alongside all the others.
@@ -133,6 +148,35 @@ comment: What do you think about this, Bill, for beside the pantry?</pre>
         date. And such a scheduled message can be altered or
         descheduled by further messages.
       </p>
+<pre>{
+  type: deferred,
+  when: 2011-11-23T12:00:00.0,
+  deferred-message: {
+    type: warning,
+    comment: Only one month to go, folks.
+  }
+}</pre>
+      <p>
+        Another common use case is when you want several messages to
+        all hit at exactly the same time: either all of them or none
+        of them. For example, you may need to change a budget and a
+        delivery date at the same time, without any risk that anyone
+        could see one change without the other. To do this you can use
+        a <tt>group</tt> message, that combines multiple other
+        messages together.
+      </p>
+<pre>{
+  type: group,
+  sub-messages: [{
+    type: modify,
+    key: budget,
+    value: 12000
+  },{
+    type: modify,
+    key: deadline,
+    value: 2011-12-23
+  }]
+}</pre>
       <p>
         These defaults cover 99% of use-cases, but messages not
         covered by this can be added to the stream without
@@ -198,7 +242,7 @@ comment: What do you think about this, Bill, for beside the pantry?</pre>
     username: bill,
     auth: [...]
   },
-  when: 2011-08-01T12:57:96.0,
+  when: 2011-08-01T12:57:46.0,
   message: {
     type: modify,
     key: budget,
@@ -319,7 +363,7 @@ comment: What do you think about this, Bill, for beside the pantry?</pre>
       </p>
 
       <div class="footer">
-        &copy; 2011 IDM
+        &copy; 2011 Ian Millington
       </div>
 
     </div>

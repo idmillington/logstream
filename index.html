@@ -137,8 +137,7 @@
         messages. There are also messages to change stream permissions
         (more on permissions below). You can email a special email
         address for a stream, and anything email to that (or cc'ed to
-        it) will be added to the stream as a message. This makes it
-        trivial to have legally provable audit trails on email.
+        it) will be added to the stream as an <tt>email</tt> message.
       </p>
       <p>
         Often you don't want a message to appear in the stream at the
@@ -177,6 +176,14 @@
     value: 2011-12-23
   }]
 }</pre>
+      <p>
+        Initially I said that streams can have data associated with
+        them, which can then be modified using <tt>modify</tt>
+        messages. Well all stream activity has to occur through
+        messages. The initial block of data associated with a stream
+        is added with a <tt>group</tt> message of this kind. Without a
+        message, a stream is featureless and void.
+      </p>
       <p>
         These defaults cover 99% of use-cases, but messages not
         covered by this can be added to the stream without

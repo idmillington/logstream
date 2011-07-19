@@ -1,75 +1,325 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset='utf-8'>
+  <head>
+    <meta charset='utf-8'>
 
-  <title>idmillington/logstream @ GitHub</title>
+    <title>idmillington/logstream @ GitHub</title>
 
-  <style type="text/css">
-    body {
+    <style type="text/css">
+      body {
       margin-top: 1.0em;
-      background-color: #e4a729;
+      line-height: 1.4em;
+      background-color: white;
       font-family: Helvetica, Arial, FreeSans, san-serif;
       color: #000000;
-    }
-    #container {
+      }
+      #container {
       margin: 0 auto;
       width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #1b58d6; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #1b58d6; }
-    h3 { text-align: center; color: #1b58d6; }
-    a { color: #1b58d6; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
-</head>
+      }
+      h1 { font-size: 3.8em; color: #336699; margin-bottom: 3px; }
+      h1 .small { font-size: 0.4em; }
+      h1 a { text-decoration: none }
+      h2 { font-size: 1.5em; color: #336699; }
+      h3 { text-align: center; color: #336699; }
+      a { color: #336699; }
+      .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+      .download { float: right; }
+      pre { background: #345; color: #fff; padding: 15px;}
+      hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+      .footer { font-size: 0.7em; text-align:center; padding-top:30px; }
+      tt { font-size: 1.4em; }
+    </style>
+  </head>
 
-<body>
-  <a href="http://github.com/idmillington/logstream"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  <body>
+    <a href="http://github.com/idmillington/logstream"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+    <div id="container">
+      <div class="download">
+        <a href="http://github.com/idmillington/logstream/zipball/master">
+          <img border="0" width="90"
+               src="http://github.com/images/modules/download/zip.png"></a>
+        <a href="http://github.com/idmillington/logstream/tarball/master">
+          <img border="0" width="90"
+               src="http://github.com/images/modules/download/tar.png"></a>
+      </div>
 
-    <div class="download">
-      <a href="http://github.com/idmillington/logstream/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/idmillington/logstream/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+      <h1>
+        <a href="http://github.com/idmillington/logstream">logstream</a>
+        <span class="small">
+          by <a href="http://github.com/idmillington">idmillington</a>
+        </span>
+      </h1>
+
+      <div class="description">
+        Secure data and issue tracking.
+      </div>
+
+      <h2>Logstreams</h2>
+      <p>
+        A logstream is a publically verifiable set of messages related
+        to a single topic. You can think of it as a Facebook feed for
+        projects, tasks, or anything you want to track; a twitter feed
+        for data.
+      </p>
+      <p>
+        Imagine you're having a new house built. That's a complex
+        process, with lots of tasks in progress at once. Let's focus
+        on one: the interior design for your new kitchen. You create a
+        logstream to track that.
+      </p>
+
+      <h2>Changing Data</h2>
+      <p>
+        Logstreams have a set of data associated with them. The data
+        is made up of key-value pairs (in fact they can be much more
+        complex, and include arbitrary data structures, but key-value
+        pairs allow us to do some neat analysis). Lets say we begin with:
+      </p>
+<pre>budget: 14000,
+deadline: 2011-12-18,
+responsible: Anne</pre>
+      <p>
+        Notice that in logstream you don't have to break topics down
+        into steps. You can, but it isn't required. In this example we
+        won't.
+      </p>
+      <p>
+        You modify a topic by adding <strong>messages</strong> to
+        it. There are lots of different kind of messages. One kind of
+        message is a change to one of its bits of data. For example,
+        we have to squeeze the budget a bit, so the following message
+        is sent.
+      </p>
+<pre>type: modify,
+key: budget,
+value: 13000</pre>
+
+      <h2>Messages</h2>
+      <p>
+        Modifying data is only one kind of message: the <tt>modify</tt>
+        message. But that is just the tiniest tip of the iceberg for
+        logstreams. Messages can be of any type, and the stream of
+        messages acts just like a facebook stream or a twitter
+        feed. Coming back to our example: Anne, the interior designer,
+        finds a superb light-fitting, and wants to get feedback on
+        it. She adds the message:
+      </p>
+<pre>type: file-uploads,
+image: [uploaded file],
+comment: What do you think about this, Bill, for beside the pantry?</pre>
+      <p>
+        This message, and the attached image is added to the stream
+        alongside all the others.
+      </p>
+      <p>
+        There are no restrictions to the message types, or the date
+        they contain. There are a few defaults, however. For defaults
+        we've seen <tt>file-upload</tt>s, and <tt>modify</tt>
+        messages. There are also messages to change stream permissions
+        (more on permissions below). You can email a special email
+        address for a stream, and anything email to that (or cc'ed to
+        it) will be added to the stream as a message. This makes it
+        trivial to have legally provable audit trails on email.
+      </p>
+      <p>
+        Often you don't want a message to appear in the stream at the
+        point where you send it. You might want to set up a reminder
+        for a later date, for example. A <tt>deferred</tt> message
+        type allows you to add another message to be played at a later
+        date. And such a scheduled message can be altered or
+        descheduled by further messages.
+      </p>
+      <p>
+        These defaults cover 99% of use-cases, but messages not
+        covered by this can be added to the stream without
+        modification. Some messages might need special behavior,
+        however, and in most cases messages will need to be edited and
+        viewed in a user interface (UI). UI handlers for editing a
+        viewing a new message type can be registered, and a core
+        handler can be registered to handle special message types.
+      </p>
+
+      <h2>People and Permissions</h2>
+      <p>
+        Streams are aggregated into projects. A project might be your
+        house being built. Whereas the streams may be individual tasks
+        that need accomplishing, or areas of the build.
+      </p>
+      <p>
+        Streams can be shared with multiple people. For each stream,
+        you can have a global list of people who can see that stream,
+        and who can add messages to the stream.
+      </p>
+      <p>
+        In addition, for each message type, you can override the
+        general settings and set read and create permissions for
+        specific users. So for example, you might want Anne's
+        assistant, Carl, to be able to see the interior design stream,
+        but not anything related to the budget. You can simply set
+        Carl to not have read permissions on budget-related messages.
+      </p>
+      <p>
+        For a project, each user can drill down into the streams they
+        have permission for and see the messages they have permission
+        to see. They can also see a combined stream, showing all the
+        messages on all the streams in that project (subject to their
+        permissions). This forms a Facebook-feed like view of
+        everything important to a project.
+      </p>
+
+      <h2>Data Tracking</h2>
+      <p>
+        At the start of this explanation, I mentioned that key-value
+        data associated with the stream can be analysed. For many
+        kinds of data (anything for a time, date or quantities, for
+        example), you can view the message stream as a graph. You can
+        ask to see the graph of the budget over time, for example.
+      </p>
+      <p>
+        If you were using a logstream to chart the progress of a
+        project, you could use this to graph the defect rate over
+        time. For a logstream to track your weight loss, it could
+        graph your weight over time.
+      </p>
+
+      <h2>Security</h2>
+      <p>
+        Using messages exclusively means the whole history of changes
+        and updates is captured in the set of messages. In fact,
+        messages internally are stored with more data than just
+        that shown above. The first message might be stored as:
+      </p>
+<pre>{
+  by: {
+    username: bill,
+    auth: [...]
+  },
+  when: 2011-08-01T12:57:96.0,
+  message: {
+    type: modify,
+    key: budget,
+    value: 13000
+  },
+  parent: "93731c2b73e0beb312a1b11f443b22018f63cf9b0dbfd35e10e146c3db36ef15"
+}</pre>
+      <p>
+        The message is stored along with who created the message,
+        an <tt>auth</tt> block of data that is used to validate that
+        the person who created the message really was who they claimed
+        to be (the details of that are not important here), the time
+        when the message was added and the message content iself.
+      </p>
+      <p>
+        The <tt>when</tt> and <tt>by</tt> of a message allows us to
+        track when things happened. If you're expecting the kitchen
+        designer to send you plans for agreement by Tuesday, and they
+        don't turn up until Friday, then the time logging shows that
+        clearly. And as we'll see below, it shows it in a way that is
+        impossible to fake.
+      </p>
+      <p>
+        So what is that huge dump of random characters
+        labelled <tt>parent</tt> at the end?  Well this is where
+        things get neat. Messages are held in a stream - a sequence,
+        where each message keeps track of the one message that came
+        before it. When a new message is added, its parent is the last
+        one on the list.
+      </p>
+      <p>
+        When a message is added, its parent is found, and then the
+        whole message object is passed through an algorithm called
+        a <strong>secure hash algorithm</strong> to produce a long
+        number, which is the message's identity. The interesting thing
+        about this number is that, if you have the number, you can't
+        fake a message that matches it. If I have the number for a
+        message, I can guarantee that the contents of that message
+        haven't been tampered with. And because that message contains
+        the secure hash for its parent, I can guarantee that the whole
+        stream of messages hasn't been tampered with, right back to
+        the first message.
+      </p>
+      <p>
+        How secure is this? Well the message identities are created by
+        a system called SHA256, that is certified by the US National
+        Security Agency as being secure for government, intelligence
+        and military communications to the highest level.
+      </p>
+
+      <h2>Provability</h2>
+      <p>
+        Put another way, if whatever you're tracking ends up in court,
+        anyone with a message number can verify the entire prior
+        history of everything in that stream. There is no way to
+        change anything without that number changing. But on the other
+        hand, if you have the number, there is no way of being able to
+        figure out what the original message was either.
+      </p>
+      <p>
+        Which makes this approach great for situations with restricted
+        permissions. For example, I am a contractor on your house
+        build. I don't get to see everything, but I can add status
+        update messages to some streams. Every time I do that, I get a
+        <strong>receipt</strong>: the message identity of the message
+        I just added. That means I can verify everything that was in
+        the stream at the point of me sending the message, even if I
+        don't have access to the stream data, or the computers they
+        sit on.
+      </p>
+      <p>
+        Why is this important?  Well imagine that I fall out with
+        Anne, the interior designer. I think she recklessly overspent
+        her budget. She claims I reduced the budget after I knew she'd
+        ordered an expensive kitchen suite. She has a receipt for the
+        message where she tells me she ordered the kitchen. That
+        receipt alone <em>proves</em> one way or another whether my
+        change in budget was before or after that point. Even if I
+        were to go fiddling around in the database, and can make
+        changes to the stored data, her receipt proves that I've been
+        tampering. I can't even claim that the database was corrupted,
+        because that too would show up.
+      </p>
+      <p>
+        And because permissions are also changed by message, the same
+        process allows us to prove who had access to what information
+        when. If someone claims that they weren't given access to a
+        piece of data until it was too late: any receipt after that
+        point verifies whether this is true or not.
+      </p>
+      <p>
+        Because receipts verify the content, but don't give it away,
+        they are made public. Anyone can see the receipt of a stream
+        at any time. This allows everyone with an interest in a stream
+        to keep occasional copies of the receipt, and in doing so it
+        ensures that the data is kept without modification.
+      </p>
+
+
+
+
+      <h2>Contact</h2>
+      <p>
+        Ian Millington (idmillington@googlemail.com)
+      </p>
+
+      <h2>Download</h2>
+      <p>
+        You can download this project in either
+        <a href="http://github.com/idmillington/logstream/zipball/master"
+           >zip</a> or
+        <a href="http://github.com/idmillington/logstream/tarball/master"
+           >tar</a> formats.
+      </p>
+      <p>You can also clone the project with
+        <a href="http://git-scm.com">Git</a> by running:
+        <pre>$ git clone git://github.com/idmillington/logstream</pre>
+      </p>
+
+      <div class="footer">
+        &copy; 2011 IDM
+      </div>
+
     </div>
-
-    <h1><a href="http://github.com/idmillington/logstream">logstream</a>
-      <span class="small">by <a href="http://github.com/idmillington">idmillington</a></span></h1>
-
-    <div class="description">
-      Secure data and issue tracking.
-    </div>
-
-    <h2>Contact</h2>
-<p>Ian Millington (idmillington@googlemail.com)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/idmillington/logstream/zipball/master">zip</a> or
-      <a href="http://github.com/idmillington/logstream/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/idmillington/logstream</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/idmillington/logstream">idmillington/logstream</a>
-    </div>
-
-  </div>
-
-  
-</body>
+  </body>
 </html>

@@ -101,7 +101,7 @@
 
       <h2>Logstreams</h2>
       <p>
-        A logstream is a publically verifiable set of messages related
+        A logstream is a publicly verifiable set of messages related
         to a single topic. You can think of it as a tamper-proof
         Facebook feed for projects, tasks, or anything you want to
         track; a Twitter feed for data.
@@ -153,10 +153,10 @@
       <p>
         You modify data in a stream by
         adding <strong>messages</strong> to it. Messages are like the
-        posts in a facebook feed, only they can change things as well
+        posts in a Facebook feed, only they can change things as well
         as just containing information. There are lots of different
         kind of messages. One kind of message is a <tt>modify</tt>
-        messag; it changes one piece of data on the stream. In our
+        message: it changes one piece of data on the stream. In our
         example, we have to squeeze the budget a bit, so the following
         message is sent.
       </p>
@@ -171,7 +171,7 @@
         Modifying data uses one kind of message: the <tt>modify</tt>
         message. But that is just the tip of the iceberg for
         logstreams. You can put messages of any type into the stream,
-        and they are accumulated just like a facebook stream or a
+        and they are accumulated just like a Facebook stream or a
         twitter feed. Coming back to our example: Anne, the interior
         designer, finds a superb light-fitting, and wants to get
         feedback on it. She adds an image to the stream:
@@ -202,9 +202,9 @@
         for a later date, for example. A <tt>deferred</tt> message
         type allows you to specify another message to be played at a
         later date. And if you change your mind, a scheduled message
-        can be altered or descheduled by further messages. To allow
+        can be altered or discarded by further messages. To allow
         deferred messages to be edited later, you have to give a
-        unique identifer, <tt>id</tt> to each one.
+        unique identifier, <tt>id</tt> to each one.
       </p>
 <pre>{
   id: one-month-warning
@@ -317,7 +317,7 @@
       <h2 id="tracking">Data Tracking</h2>
       <p>
         At the start of this explanation, I mentioned that simple
-        key-value data associated with the stream can be analysed. For
+        key-value data associated with the stream can be analyzed. For
         many kinds of data (anything for a time, date or quantities,
         for example), you can view the message stream as a graph. You
         can ask to see the graph of the budget over time. For example:
@@ -355,7 +355,7 @@
         an <tt>auth</tt> block of data that is used to validate that
         the person who created the message really was who they claimed
         to be (the details of that are not important here), the time
-        when the message was added and the message content iself.
+        when the message was added and the message content itself.
       </p>
       <p>
         The <tt>when</tt> and <tt>by</tt> of a message allows us to
@@ -367,7 +367,7 @@
       </p>
       <p>
         So what is that huge dump of random characters
-        labelled <tt>parent</tt> at the end?  Well this is where
+        labeled <tt>parent</tt> at the end?  Well this is where
         things get neat. Messages are held in a stream - a sequence,
         where each message keeps track of the one message that came
         before it. When a new message is added, its parent is the last
@@ -469,7 +469,7 @@
           Track project progress, allowing different parties to see
           different streams within a project. Keep up to date with the
           whole project from one overview, and drill into each stream
-          to analyse its data.
+          to analyze its data.
         </li>
         <li>
           Use a stream to track the changing version of a
@@ -485,7 +485,7 @@
         </li>
         <li>
           Use a stream for every client you do work for. Given them
-          access to te stream. You can track the hours worked, add
+          access to the stream. You can track the hours worked, add
           reminders to the stream and use it as a base for
           documents. And you can keep stuff that the client shouldn't
           see invisible, while allowing them to see and comment on the

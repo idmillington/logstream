@@ -5,13 +5,18 @@
 
     <title>idmillington/logstream @ GitHub</title>
 
+    <link href='http://fonts.googleapis.com/css?family=Varela&v2' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round&v2' rel='stylesheet' type='text/css'>
     <style type="text/css">
       body {
       margin-top: 1.0em;
-      line-height: 1.4em;
+      line-height: 1.5em;
       background-color: white;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
+      font-family: Varela, Helvetica, Arial, FreeSans, san-serif;
       color: #000000;
+      }
+      h1,h2,h3,h4 {
+      font-family: "Varela Round" , Helvetica, Arial, FreeSans, san-serif; 
       }
       #container {
       margin: 0 auto;
@@ -97,15 +102,9 @@
       <h2>Logstreams</h2>
       <p>
         A logstream is a publically verifiable set of messages related
-        to a single topic. You can think of it as a Facebook feed for
-        projects, tasks, or anything you want to track; a twitter feed
-        for data.
-      </p>
-      <p>
-        Imagine you're having a new house built. That's a complex
-        process, with lots of tasks in progress at once. Let's focus
-        on one: the interior design for your new kitchen. You create a
-        logstream to track that.
+        to a single topic. You can think of it as a tamper-proof
+        Facebook feed for projects, tasks, or anything you want to
+        track; a Twitter feed for data.
       </p>
 
       <ul>
@@ -123,10 +122,17 @@
 
       <h2 id="data">Changing Data</h2>
       <p>
-        Logstreams have a set of data associated with them. The data
-        is made up of key-value pairs (in fact they can be much more
-        complex, and include arbitrary data structures, but key-value
-        pairs allow us to do some neat analysis). Lets say we begin with:
+        Imagine you're having a new house built. That's a complex
+        process, with lots of tasks in progress at once. Let's focus
+        on one: the interior design for your new kitchen. You create a
+        logstream to track that.
+      </p>
+      <p>
+        Logstreams, or <strong>streams</strong> for short, have a set
+        of data associated with them. The data is made up of key-value
+        pairs (in fact they can be much more complex, and include
+        arbitrary data structures, but key-value pairs allow us to do
+        some neat analysis). Lets say we begin with:
       </p>
 <pre>{
   title: Kitchen Interior,
@@ -145,16 +151,14 @@
           underlying data.
       </small></p>
       <p>
-        A logstream isn't a to do list. You don't have to break topics
-        down into steps. You can, but it isn't required. In this
-        example we won't.
-      </p>
-      <p>
-        You modify a topic by adding <strong>messages</strong> to
-        it. There are lots of different kind of messages. One kind of
-        message is a change to one of its bits of data. For example,
-        we have to squeeze the budget a bit, so the following message
-        is sent.
+        You modify data in a stream by
+        adding <strong>messages</strong> to it. Messages are like the
+        posts in a facebook feed, only they can change things as well
+        as just containing information. There are lots of different
+        kind of messages. One kind of message is a <tt>modify</tt>
+        messag; it changes one piece of data on the stream. In our
+        example, we have to squeeze the budget a bit, so the following
+        message is sent.
       </p>
 <pre>{
   type: modify,
@@ -164,13 +168,13 @@
 
       <h2 id="messages">Messages</h2>
       <p>
-        Modifying data is only one kind of message: the <tt>modify</tt>
-        message. But that is just the tiniest tip of the iceberg for
-        logstreams. Messages can be of any type, and the stream of
-        messages acts just like a facebook stream or a twitter
-        feed. Coming back to our example: Anne, the interior designer,
-        finds a superb light-fitting, and wants to get feedback on
-        it. She adds the message:
+        Modifying data uses one kind of message: the <tt>modify</tt>
+        message. But that is just the tip of the iceberg for
+        logstreams. You can put messages of any type into the stream,
+        and they are accumulated just like a facebook stream or a
+        twitter feed. Coming back to our example: Anne, the interior
+        designer, finds a superb light-fitting, and wants to get
+        feedback on it. She adds an image to the stream:
       </p>
 <pre>{
   type: file-uploads,
@@ -178,27 +182,32 @@
   comment: What do you think about this, Bill, for beside the pantry?
 }</pre>
       <p>
-        This message, and the attached image is added to the stream
-        alongside all the others.
+        There are no restrictions to the message types, or the data
+        they contain. You can invent your own message types that are
+        meaningful to your application. There are a few defaults,
+        however. For defaults we've seen <tt>file-upload</tt>s,
+        and <tt>modify</tt> messages. There are also messages to
+        change stream permissions in the same way (more on permissions
+        below).
       </p>
       <p>
-        There are no restrictions to the message types, or the date
-        they contain. There are a few defaults, however. For defaults
-        we've seen <tt>file-upload</tt>s, and <tt>modify</tt>
-        messages. There are also messages to change stream permissions
-        (more on permissions below). You can email a special email
-        address for a stream, and anything email to that (or cc'ed to
-        it) will be added to the stream as an <tt>email</tt> message.
+        The logstream server allows you to email, cc or bcc a special
+        email address for each stream. Anything sent to that address,
+        along with any attachments, will be added to the stream as
+        an <tt>email</tt> message.
       </p>
       <p>
         Often you don't want a message to appear in the stream at the
         point where you send it. You might want to set up a reminder
         for a later date, for example. A <tt>deferred</tt> message
-        type allows you to add another message to be played at a later
-        date. And such a scheduled message can be altered or
-        descheduled by further messages.
+        type allows you to specify another message to be played at a
+        later date. And if you change your mind, a scheduled message
+        can be altered or descheduled by further messages. To allow
+        deferred messages to be edited later, you have to give a
+        unique identifer, <tt>id</tt> to each one.
       </p>
 <pre>{
+  id: one-month-warning
   type: deferred,
   when: 2011-11-23T12:00:00.0,
   deferred-message: {
@@ -228,6 +237,14 @@
   }]
 }</pre>
       <p>
+        Another form of group called a <tt>transaction</tt> allows you
+        to send a set of messages to multiple streams at the exact
+        same time. This functionality is powerful enough to allow a
+        set of streams to be used as a double-entry accounting
+        system. The details of transactions aren't covered in this
+        introduction.
+      </p>
+      <p>
         Initially I said that streams can have data associated with
         them, which can then be modified using <tt>modify</tt>
         messages. Well all stream activity has to occur through
@@ -235,15 +252,36 @@
         is added with a <tt>group</tt> message of this kind. Without a
         message, a stream is featureless and void.
       </p>
-      <img src="ios.png" style="float:right; margin: 0.5em 0 0.5em 0.5em; border-bottom: 1px solid black;">
       <p>
         These defaults cover 99% of use-cases, but messages not
-        covered by this can be added to the stream without
-        modification. Some messages might need special behavior,
-        however, and in most cases messages will need to be edited and
-        viewed in a user interface (UI). UI handlers for editing a
-        viewing a new message type can be registered, and a core
-        handler can be registered to handle special message types.
+        covered by this can be added to the stream in an ad-hoc
+        manner. The stream accepts any message it is given (as long as
+        the creator of the message has the right
+        permissions). Messages can be arbitrary data, with any
+        structure. In the top level of the data, we reserve three
+        keys: <tt>type</tt>, for the type of message; <tt>id</tt>,
+        used to identify a message so it can be edited later;
+        and <tt>tags</tt> to support general tagging of messages (the
+        latter isn't described in this guide). If you need to use one
+        of these in your message, then you can just nest the actual
+        message one layer deeper:</p>
+<pre>{
+  type: complaint,
+  data: {
+    id: website-204984,
+    type: email,
+    from: dana@example.com
+  }
+}</pre>
+      <img src="ios.png" style="float:right; margin: 0.5em 0 0.5em 0.5em; border-bottom: 1px solid black;">
+      <p>
+        Some custom messages might need special behavior. In most
+        cases messages will also need to be created and viewed in a
+        user interface (UI) -- unknown message types are displayed and
+        created in a very primitive way, and can't easily be
+        created. UI handlers for editing a viewing a new message type
+        can be registered, and a core handler can be registered to
+        handle special message types.
       </p>
 
       <h2 id="perms">People and Permissions</h2>
@@ -258,12 +296,14 @@
         and who can add messages to the stream.
       </p>
       <p>
-        In addition, for each message type, you can override the
-        general settings and set read and create permissions for
-        specific users. So for example, you might want Anne's
-        assistant, Carl, to be able to see the interior design stream,
-        but not anything related to the budget. You can simply set
-        Carl to not have read permissions on budget-related messages.
+        In addition, you can have further permission rules to fine
+        tune the permissions. You can have different rules for
+        different message types, or rules to limit who can modify
+        particular keys in the stream data. So for example, you might
+        want Anne's assistant, Carl, to be able to see the interior
+        design stream, but not anything related to the budget. You can
+        simply set Carl to not have read permissions on the budget or
+        budget modification messages.
       </p>
       <p>
         For a project, each user can drill down into the streams they
@@ -276,11 +316,11 @@
 
       <h2 id="tracking">Data Tracking</h2>
       <p>
-        At the start of this explanation, I mentioned that key-value
-        data associated with the stream can be analysed. For many
-        kinds of data (anything for a time, date or quantities, for
-        example), you can view the message stream as a graph. You can
-        ask to see the graph of the budget over time, for example.
+        At the start of this explanation, I mentioned that simple
+        key-value data associated with the stream can be analysed. For
+        many kinds of data (anything for a time, date or quantities,
+        for example), you can view the message stream as a graph. You
+        can ask to see the graph of the budget over time, for example.
       </p>
       <div id="chart_div"></div>
       <p>
